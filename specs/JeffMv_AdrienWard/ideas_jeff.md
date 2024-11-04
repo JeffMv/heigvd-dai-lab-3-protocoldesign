@@ -10,13 +10,47 @@ Only digits
 
 
 
+**TODO :**
+
+les formats des entrées des messages du client
+
+Le format de retour du serveur
+
+les codes d erreurs 
+
+les commandes des opérations
+
+Les formats des nombres (clients, serveurs)
+
+	- clarifier tous les typesd e de ofmrat de nbrs acceptés.
+
+Expliquer fonctionnement côté client. (). Avec exemople par ex.
+
+
+
+
+
+
+
 Documentation of options:
 
-- Inputs Mode : `1` for scientific numbers , `2` for binary numbers, `3` for octal numbers, `4` for hexadecimal numbers
+- Inputs Mode : `1` decimal numbers , `2` for binary numbers, `8` for octal numbers, `16` for hexadecimal numbers, 
   - decides the format for both operands.
 - Form
-  - client sends `1 ADD -3.5  4.0`
-  - Server responds `<status> <error_detail> <result>`
+  - client sends `noVersion 10 ADD -3.5  4.0`
+    ```
+    noVersion
+    1
+    ADD
+    -3.5
+    4.0
+    ```
+  
+    
+  - Server responds `<status> <result>`
+  - ~~Server responds `<status>\n<result>\n<error_detail>`~~
+    
+    - PROBLEME : encodage de error detail
     - error status codes (masks)
       - `<status>`
         - `<error_detail>`
@@ -45,6 +79,13 @@ Example 1
 
 - user wants `( -123.50 * -4.0 )` and answer should be `494`
 - we want easy implementation of clients in other languages, so computing logic goes in server.
+
+```
+# clein t sends
+
+```
+
+
 
 
 
