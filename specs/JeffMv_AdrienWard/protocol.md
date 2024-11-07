@@ -8,12 +8,6 @@ Version 1.0
 
 **TODO :**
 
-- [x] les formats des entrées des messages du client
-- [x] Le format de retour du serveur
-- [x] les codes d erreurs  
-- [x] les commandes des opérations 
-- [x] Les formats des nombres (clients, serveurs)
-  - [x] clarifier tous les types de format de nbrs acceptés.
 - [ ] Expliquer fonctionnement côté client. Avec exemple par ex.
   - [x] exemple 1
   - [x] exemple 2
