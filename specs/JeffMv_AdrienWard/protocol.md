@@ -72,6 +72,7 @@ Messages used to communicate:
       - SUB
       - MUL
       - DIV
+      - EXT : (exit) close the connection
   - `number1` : left operand
   - `number2` : right operand
 
@@ -196,12 +197,35 @@ The client establishes the connexion to `10.1.2.3` and port `2277`.
 4. The server responds with
    `0 494`
    (where 0 means no error, and 494 is the result of the multiplication)
+5. At this point, the connexion stays open and the client can send another command / expression, or end the connexion.
+6. The user wants to close the client program, so the client program sends 
+    `1 0 EXT 0 0` . 
+   where arguments correspond to 
+   `<noVersion> <numberBase> <operation> <number1> <number2>`.
+7. The server closes the socket connection.
+
+
+
+#### Example 2
+
+The user wants the answer to the following arithmetic expression : `( -123.50 * -4.0  + 6)` and answer should be `500`. The expression is equivalent to `( (-123.50 * -4.0)  + 6)`
+
+Client starts with steps  1 to 4 from example 1 to get the result of the first expression `(-123.50 * -4.0)`. 
+
+Then :
+
+5. the client sends
+   `2 10 ADD 494 6`    
+6. the server responds
+   `0 500`
+7. [something unexpected on the client machine and] the client app is unexpectedly and unproperly closed.
+8. the server keeps the socket connection open.
 
 
 
 
 
-Example 2
+#### Example 3
 
 - user wants `( (3 * -4.0 )` and answer should be `494`
 - we want easy implementation of clients in other languages, so computing logic goes in server.
@@ -210,7 +234,7 @@ Example 2
 
 
 
-Example 3
+#### Example 4
 
 - user wants `( (3 * -4.0) + (8 / 2) )`  :
   - the client sends each part 
