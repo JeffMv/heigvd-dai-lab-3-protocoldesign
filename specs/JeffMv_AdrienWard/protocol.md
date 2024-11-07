@@ -11,8 +11,8 @@ Version 1.0
 - [ ] Expliquer fonctionnement côté client. Avec exemple par ex.
   - [x] exemple 1
   - [x] exemple 2
-  - [ ] exemple 3
-  - [ ] exemple 4
+  - [ ] exemple 3 : example of an error in computation
+  - [ ] exemple 4 : example of malformed client message
 
 
 
@@ -208,18 +208,13 @@ Then :
 
 #### Example 3
 
-- user wants `( (3 * -4.0 )` and answer should be `494`
-- we want easy implementation of clients in other languages, so computing logic goes in server.
-
-
+Example of an error in computation
 
 
 
 #### Example 4
 
-- user wants `( (3 * -4.0) + (8 / 2) )`  :
-  - the client sends each part 
-- we want easy implementation of clients in other languages, so computing logic goes in server.
+Example of client sending malformed message
 
 
 
@@ -250,6 +245,19 @@ The Stateless protocol is prefered.
 
 And we find it better to have each server response return a complete state that the client can display. 
 
+The opposite would be to have multiple exchanges of 1 value each
+
+A stateful protocol would be a problem
+
+ Un protocole avec État aurait été un problème, par exemple si il y a un Ping ou une interférence réseau, l'interfaces utilisateurs et l'expérience utilisateur se trouverait dégradé.
+
+Chaque fois qu'il y a un échange sur le réseau, il y a une possibilité de cette échange et de la latence ou bien Quilier une erreur de réseau et que le echange soit coupé.
+
+De plus, si l'on prend le cas d'une connexion avec un serveur sur un continent américain, et le client dans le continent européen, chaque échange de messages serait ralenti par le Ping par la latence entre les deux continents, et cela se ressentirais sur l'expérience utilisateur.
+
+Il est donc préférable, dans la mesure du possible, de utiliser un protocole sans états, pour éviter des interruption intermittente en plein milieu d'un échange critique dans le protocole. are returning a taper off values where is the error message in dirty stuff returned values
+
+
 
 **Server returning a tuple of values where the error message can be deduced from other arguments**
 
@@ -261,6 +269,12 @@ Cons:
 
 - extra string argument needs to be thoroughly tested too (with edge cases)
 - language is set by the server. Language of error messages should not be set in the specification of a protocol. There could be messages in other alphabets.
+
+Au lieu de retourner avec nos codes d'erreur et notre valeur calculée, au lieu de retourner aussi un message d'erreur de type string que le serveur donne au client, on aurait simplement afficher des messages d'erreur. On pourrait simplement donner la signification des messages d'erreur. L'interprétation des messages d'erreur se fera dans une documentation séparée, et les cadeaux ont été documents dans le protocole.
+
+L'un des désavantages de retourner une string de message d'erreur et que la langue est définie par le serveur. Le message doit ensuite être localisé par le client, sinon les messages s'affiche en français en anglais pardon sur le client. Autant dans ce cas utiliser directement les codes d'erreur, car nous souhaitons.
+
+La spécifications d'un protocole ne devrait pas dire la langue dans laquelle est faite la communication. Le message Dereure envoyé par le serveur pourrait être en français ou être en anglais ou en allemand d'autres langues, et pour éviter de devoir mentionner pour chaque serveur Callelongue le serveur parle, nous choisissons de ne garder que les codes d'erreur et non pas les messages d'erreur dans la spécifications du protocole.
 
 
 
