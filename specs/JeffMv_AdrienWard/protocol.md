@@ -233,7 +233,25 @@ Ideas considered but not implemented
 
 
 
-For maintainability: 
+**For testability and maintainability:** 
+
+- it would be best for the protocol to be as simple as possible. It would be best to be able to test the protocol from start to finish, and in order to do that: the simpler the protocol the better, and the easier it is to test.
+- The less options we offer through the protocol the less things we have to test, and the better.
+  - For instance, if we return `<statusCode> <result> <errorString>`, where `<errorString>` could be deduced from the 2 other values `<statusCode>`, the field would be redundant. But even with a redundant value, we would still need to test edge cases for this redundant argument.
+  -  instead of returning his training as well as the other arguments, 
+    Au lieu de retourner une valeur de type string redondante en plus de nos arguments le retour de nos valeurs de retour, il est préférable de redonner le stricte minimum. C'est long en plus tester un argument redondant tel qu'une string, il faudrait pouvoir tester les quatre limites de la string, string vide, string multiligne, string dans terminé, valeur d'échappement caractère d'échappem
+
+
+
+
+
+
+**Stateless vs Stateful :**
+
+The Stateless protocol is prefered. 
+
+And we find it better to have each server response return a complete state that the client can display. 
+
 
 - it would be best for the 
 
