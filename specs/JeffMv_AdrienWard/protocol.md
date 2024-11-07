@@ -177,32 +177,25 @@ In the following examples, the server will be at IP `10.1.2.3`
 
 
 
-The user wants the answer to the following arithmetic expression : `( -123.50 * -4.0 )`.
+The user wants the answer to the following arithmetic expression : `( -123.50 * -4.0 )` and answer should be `494`.
 
 
-
-The client app sends the inner part without paranthesis `()`
 
 The client establishes the connexion to `10.1.2.3` and port `2277`.
 
 
 
-1. Server sends the range of protocol versions it supports  `1 1`
+1. Server sends the range of protocol versions it supports  `1 2`
+   (Meaning the server understands protocol versions 1 to version 2).
 2. Client responds [according to protocol version 1] : ``
 
-
-
-
-
-- user wants `( -123.50 * -4.0 )` and answer should be `494`
-- we want easy implementation of clients in other languages, so computing logic goes in server.
-
-```
-# client sends
-
-```
-
-Connexion is established
+3. The client app sends the inner part without paranthesis `()` :  
+   `2 10 MUL 123.50 -4.0`    
+   (which correspond to 
+   `<noVersion> <numberBase> <operation> <number1> <number2>` )
+4. The server responds with
+   `0 494`
+   (where 0 means no error, and 494 is the result of the multiplication)
 
 
 
