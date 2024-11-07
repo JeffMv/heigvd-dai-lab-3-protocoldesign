@@ -229,7 +229,7 @@ Example 3
 
 
 
-Ideas considered but not implemented
+Ideas considered
 
 
 
@@ -253,7 +253,18 @@ The Stateless protocol is prefered.
 And we find it better to have each server response return a complete state that the client can display. 
 
 
-- it would be best for the 
+**Server returning a tuple of values where the error message can be deduced from other arguments**
+
+Pros:
+
+- Client can display off the bat an error message for most errors that happen.
+
+Cons:
+
+- extra string argument needs to be thoroughly tested too (with edge cases)
+- language is set by the server. Language of error messages should not be set in the specification of a protocol. There could be messages in other alphabets.
+
+
 
 
 
