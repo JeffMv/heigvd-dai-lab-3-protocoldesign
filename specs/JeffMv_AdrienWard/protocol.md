@@ -8,19 +8,17 @@ Version 1.0
 
 **TODO :**
 
-les formats des entrées des messages du client
-
-Le format de retour du serveur
-
-les codes d erreurs 
-
-les commandes des opérations
-
-Les formats des nombres (clients, serveurs)
-
- - clarifier tous les typesd e de ofmrat de nbrs acceptés.
-
-Expliquer fonctionnement côté client. (). Avec exemople par ex.
+- [x] les formats des entrées des messages du client
+- [x] Le format de retour du serveur
+- [x] les codes d erreurs  
+- [x] les commandes des opérations 
+- [x] Les formats des nombres (clients, serveurs)
+  - [x] clarifier tous les types de format de nbrs acceptés.
+- [ ] Expliquer fonctionnement côté client. Avec exemple par ex.
+  - [x] exemple 1
+  - [x] exemple 2
+  - [ ] exemple 3
+  - [ ] exemple 4
 
 
 
@@ -64,40 +62,30 @@ Messages used to communicate:
 
   - `noVersion` : protocol version used
 
-  - `numberBase` : numerical base
-
+  - `numberBase` : numerical base the number is written in. 
+    This version of the protocol only supports base 10. `numberBase`  takes value 10 to indicate that the numbers used as operands will the response will be written in base 10.
+  
   - `operation` : one of the supported keywords.
     - Operands
-      - ADD
-      - SUB
-      - MUL
-      - DIV
-      - EXT : (exit) close the connection
-  - `number1` : left operand
-  - `number2` : right operand
+      - `ADD` : addition
+      - `SUB` : subtraction
+      - `MUL` : multiplication
+      - `DIV` : division
+      - `EXT` : (exit) the server will close the connection
+  - `number1` : left operand (number)
+  - `number2` : right operand (number)
 
 
 
-Server sends : 
-
-- 
-
-
-
-input format:
-
-numbers have digits + `-+.`. Without the minus sign, the nnumbers are considered positiv.
-
-Only digits
+- Server responses follow the format  `<status> <result>`, where both are numerical values.
+  - status is an integer
+  - result can be a floating point number or an integer, depending on the context.
 
 
 
-Number format (number operands, or computation result):  `[-|+] [0-9]+ .? [0-9]*` 
+Number format:
 
-- optional prepending sign (`-` or `+`). Without a prepending minus sign, the numbers are considered positiv.
-- digits,  Floating point notation using the dot `.`. 
-
-
+numbers have digits and `-+.`. Without the minus sign, the numbers are considered positiv. A decimal number uses `.` as the floating point separator. Scientific notation is not supported.
 
 
 
@@ -113,32 +101,6 @@ Documentation of options:
   
   
   
-  - Server responds `<status> <result>`
-  - ~~Server responds `<status>\n<result>\n<error_detail>`~~
-    - PROBLEME : encodage de error detail
-    - error status codes (masks)
-      - `<status>`
-        - `<error_detail>`
-      - 0 : no error
-        - 0 : error detail
-      - 1 : general malformed input
-        - Number of args
-      - 2 : operation error
-      - 4 : operand error
-        - 1 : left operand error
-        - 2 : right operand error
-      - 8 : maths error
-        - 1 : sqrt of negativ
-        - 2 : division by 0
-      - 16 : protocol error
-        - unsupported protocol, or client message did not respect the protocol
-      - 32 : other error
-        - 1 : custom text error
-    - `<result>` or error message
-      - number if OK
-      - or string if error
-
-
 
 ### Section 4: Specific Elements
 
@@ -146,23 +108,48 @@ Covered in this section :  Error handling
 
 
 
-Server error codes for  `<status>`
+Server responds `<status> <result>`
+In case of an error (`status != 0`), and the `result` takes a mask of values to indicate all the error details, when applicable.
 
-- 0 : no error
-  - 0 : error detail
-- 1 : general malformed input
-  - Number of args
-- 2 : operation error
-- 4 : operand error
-  - 1 : left operand error
-  - 2 : right operand error
-- 8 : maths error
-  - 1 : sqrt of negativ
-  - 2 : division by 0
-- 16 : protocol error
-  - unsupported protocol, or client message did not respect the protocol
-- 32 : other error
-  - 1 : custom text error
+
+
+Bitmask values for `status` :
+
+- `0` : no error
+
+  - `result` contains the result of the computation
+
+- `1` : general malformed input
+
+  - `result` has value 0
+
+- `2` : operation error
+
+  - `result` has value 0
+
+- `4` : operand error
+
+  `result` takes value as a mask:
+
+  - `1` : left operand error
+  - `2` : right operand error
+
+- `8` : maths error
+  `result` takes value as a mask:
+
+  - `1` : sqrt of negativ
+  - `2` : division by 0
+
+- `16` : protocol error. 
+
+  `result` takes value as a mask:
+
+  - `0`: unsupported protocol
+  - `1`: client message did not respect the protocol
+
+- `32` : other error
+
+  - `result` has value 0
 
 
 
