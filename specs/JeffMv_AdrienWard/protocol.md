@@ -1,18 +1,12 @@
 ## CSAP (Client-Server Arithmetic Protocol)
 
-Version 1.0
+Version 2.0
 
 
 
-## TODO : 
+The goal of this protocol is to allow computation of mathematical expressions in a client-server architecture.
 
-**TODO :**
-
-- [ ] Expliquer fonctionnement côté client. Avec exemple par ex.
-  - [x] exemple 1
-  - [x] exemple 2
-  - [ ] exemple 3 : example of an error in computation
-  - [ ] exemple 4 : example of malformed client message
+The protocol is designed in a way that enables it to evolve and be able to handle more complex mathematical operations. In order to do that we have prepared a set of communication formats  zo handle those future changes.
 
 
 
@@ -167,23 +161,43 @@ The client establishes the connexion to `10.1.2.3` and port `2277`.
 
 
 
-1. Server sends the range of protocol versions it supports  `1 2`
-   (Meaning the server understands protocol versions 1 to version 2).
-2. Client responds [according to protocol version 1] : ``
+1. Server sends informations about its supported operations with the following message format:
+   `WELCOME:PROTOCOL:<min_protocol>:<max_protocol>:<operation_name> [<operation_name> ...]`
 
-3. The client app sends the inner part without paranthesis `()` :  
+   Example of real message : `WELCOME:PROTOCOL:1:2:ADD,SUB,MUL,DIV,EXT`
+   (Meaning the server understands protocol versions 1 to version 2, and the 5 operations commands `ADD,SUB,MUL,DIV,EXT`).
+
+2. The server sends an integer `N` followed by a new line, to indicate that the next `N` lines are a documentation of the expected exchange format.
+   Example:
+
+   ```
+   3
+   Opérations supportées: <operation> <operand1> <operand2>
+   Avec <operation> prenant une valeur parmi : ADD,SUB,MUL,DIV,EXT
+   Valeurs acceptées pour <operandX>: nombre à virgule
+   ```
+
+   
+
+3. [The client app can display the message to the end user].
+
+4. The client app sends the inner part of the desired expression, without paranthesis :  
    `2 10 MUL 123.50 -4.0`    
    (which correspond to 
    `<noVersion> <numberBase> <operation> <number1> <number2>` )
-4. The server responds with
+
+5. The server responds with
    `0 494`
    (where 0 means no error, and 494 is the result of the multiplication)
-5. At this point, the connexion stays open and the client can send another command / expression, or end the connexion.
-6. The user wants to close the client program, so the client program sends 
-    `1 0 EXT 0 0` . 
+
+6. At this point, the connexion stays open and the client can send another command / expression, or end the connexion.
+
+7. The user wants to close the client program, so the client program sends 
+   `1 0 EXT 0 0` . 
    where arguments correspond to 
    `<noVersion> <numberBase> <operation> <number1> <number2>`.
-7. The server closes the socket connection.
+
+8. The server closes the socket connection.
 
 
 
@@ -203,18 +217,6 @@ Then :
 8. the server keeps the socket connection open.
 
 
-
-
-
-#### Example 3
-
-Example of an error in computation
-
-
-
-#### Example 4
-
-Example of client sending malformed message
 
 
 

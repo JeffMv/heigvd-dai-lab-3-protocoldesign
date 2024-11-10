@@ -38,7 +38,7 @@ public class Server {
 
                     System.out.println("A client is connected");
 
-                    clientOut.write(String.format("WELCOME:PROTOCOL:" + PROTOCOL_VERSION_MIN + ":" + PROTOCOL_VERSION_MAX + ":ADD,SUB,MUL,DIV\n"));
+                    clientOut.write(String.format("WELCOME:PROTOCOL:" + PROTOCOL_VERSION_MIN + ":" + PROTOCOL_VERSION_MAX + ":ADD,SUB,MUL,DIV,EXT\n"));
                     clientOut.write(String.format("3\n")); // announce to client the nbr of lines to read
                     clientOut.write(String.format("Opérations supportées: <operation> <operand1> <operand2>\nAvec <operation> prenant une valeur parmi : ADD,SUB,MUL,DIV,EXT\nValeurs acceptées pour <operandX>: nombre à virgule" + "\n"));
                     clientOut.flush();
