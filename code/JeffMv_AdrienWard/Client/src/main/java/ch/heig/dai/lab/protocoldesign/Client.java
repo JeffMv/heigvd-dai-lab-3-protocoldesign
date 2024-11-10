@@ -21,16 +21,30 @@ public class Client {
              BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))) {
 
             // Lecture et affichage du message de bienvenue du serveur
-            System.out.println("Liste des opérations supportées par le serveur :");
-            String welcomeMessage = in.readLine();
-            System.out.println(welcomeMessage);
+            String srvGreeting = in.readLine();
+            String nbrLinesToReadMsg = in.readLine();
+            int nbrLinesToRead = 1;
+            try {
+                nbrLinesToRead = Integer.parseInt(nbrLinesToReadMsg);
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur : le serveur a envoyé un nombre de lignes à lire invalide. Veuillez vérifier la version du serveur. Déconnexion.");
+                throw new RuntimeException("le serveur a envoyé un nombre de lignes à lire invalide. Veuillez vérifier la version du serveur.");
+            }
+
+            String welcomeMessage = "";
+            for (int i = 0; i < nbrLinesToRead; ++i) {
+                welcomeMessage += in.readLine() + "\n";
+            }
+            System.out.println("Liste des opérations supportées par le serveur :" + welcomeMessage);
 
             // Initialisation de l'interface de commande
             Scanner scanner = new Scanner(System.in);
 
             while (true) {
-                System.out.println("\nEntrez une opération au format : <version> <base> <operation> <nombre1> <nombre2>");
-                System.out.println("Par exemple : 1 10 ADD -3.5 4.0 ou tapez EXT pour quitter.");
+                // System.out.println("\nEntrez une opération au format : <version> <base> <operation> <nombre1> <nombre2>");
+                // System.out.println("Par exemple : 1 10 ADD -3.5 4.0 ou tapez EXT pour quitter.");
+                System.out.println("\nEntrez une opération au format : <operation> <nombre1> <nombre2>");
+                System.out.println("Par exemple : ADD -3.5 4.0 ou tapez EXT pour quitter.");
 
                 // Lecture de l'opération saisie par l'utilisateur
                 String input = scanner.nextLine();
@@ -43,7 +57,7 @@ public class Client {
                 }
 
                 // Envoi de la requête au serveur
-                out.write(input + "\n");
+                out.write("1 10 " + input.trim() + "\n");
                 out.flush();
 
                 // Lecture et affichage de la réponse du serveur
@@ -66,7 +80,10 @@ public class Client {
             }
         } catch (IOException e) {
             System.out.println("Client : exception lors de la connexion au serveur : " + e.getMessage());
+        } catch (RuntimeException e) {
+            System.out.println("Client : Erreur dans les échanges avec le serveur : " + e.getMessage());
         }
+    }
 
     /**
     * Affiche un message d'erreur en fonction du code d'état reçu.
@@ -82,7 +99,4 @@ public class Client {
             default -> System.out.println("Erreur inconnue.");
         }
     }
-    }
-
-
 }
