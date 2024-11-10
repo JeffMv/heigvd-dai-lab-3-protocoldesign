@@ -35,7 +35,7 @@ public class Client {
             for (int i = 0; i < nbrLinesToRead; ++i) {
                 welcomeMessage += in.readLine() + "\n";
             }
-            System.out.println("Liste des opérations supportées par le serveur :" + welcomeMessage);
+            System.out.println("Liste des opérations supportées par le serveur.\n" + welcomeMessage);
 
             // Initialisation de l'interface de commande
             Scanner scanner = new Scanner(System.in);
